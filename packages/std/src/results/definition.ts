@@ -3,7 +3,7 @@
 import type { BlobType, LiteralUnion } from '../shared'
 
 import type { resultTags } from './tag'
-import type { ResultAsync } from './utils/async'
+import type { ResultAsync as $ResultAsync } from './utils/async'
 import type { Err } from './utils/err'
 import type { Ok } from './utils/ok'
 import type { Tags } from './utils/tag'
@@ -76,6 +76,25 @@ declare global {
     type Result<T, N extends Std.ErrorValues = never, C extends Std.ErrorValues[] = []> =
       | Ok<T, N, C>
       | Err<T, N, C>
+
+    type ResultAsync<
+      T,
+      N extends Std.ErrorValues = never,
+      C extends Std.ErrorValues[] = [],
+    > = $ResultAsync<T, N, C>
+
+    type Middleware<A extends BlobType[], R> = ((...args: A) => R) & {
+      addCauses: <C extends Std.ErrorValues[] = []>(
+        ...additionalCauses: C
+      ) => Middleware<
+        A,
+        R extends Std.Result<BlobType, BlobType, BlobType[]>
+          ? Std.InjectError<R, Std.InferNameType<R>, C>
+          : R extends Std.ResultAsync<BlobType, BlobType, BlobType[]>
+            ? Std.InjectError<R, Std.InferNameType<R>, C>
+            : R
+      >
+    }
 
     /**
      * Recursively extracts nested Ok types or wraps as Ok.

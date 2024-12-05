@@ -92,11 +92,11 @@ describe('std/results/fn', () => {
         return 'ok'
       })()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Ok)
-      expect(called.unwrap()).toBe('ok')
+      expect(awaited).toBeInstanceOf(Ok)
+      expect(awaited.unwrap()).toBe('ok')
     })
 
     test('ok - nested 1', async () => {
@@ -106,11 +106,11 @@ describe('std/results/fn', () => {
         return okAsync('ok')
       })()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Ok)
-      expect(called.unwrap()).toBe('ok')
+      expect(awaited).toBeInstanceOf(Ok)
+      expect(awaited.unwrap()).toBe('ok')
     })
 
     test('ok - nested 2', async () => {
@@ -120,11 +120,11 @@ describe('std/results/fn', () => {
         return okAsync(okAsync('ok'))
       })()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Ok)
-      expect(called.unwrap()).toBe('ok')
+      expect(awaited).toBeInstanceOf(Ok)
+      expect(awaited.unwrap()).toBe('ok')
     })
 
     test('ok - nested 3', async () => {
@@ -134,11 +134,11 @@ describe('std/results/fn', () => {
         return okAsync(okAsync(okAsync('ok')))
       })()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Ok)
-      expect(called.unwrap()).toBe('ok')
+      expect(awaited).toBeInstanceOf(Ok)
+      expect(awaited.unwrap()).toBe('ok')
     })
 
     test('err - not nested', async () => {
@@ -148,15 +148,15 @@ describe('std/results/fn', () => {
         return errAsync('?test', 'test message')
       }, '?test-cause')()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Err)
-      expect(called.unwrap).toThrow()
+      expect(awaited).toBeInstanceOf(Err)
+      expect(() => awaited.unwrap()).toThrow(Err)
 
-      if (called.isErr()) {
-        expect(called.name).toBe('?test')
-        expect(called.causes).toEqual(['?test-cause'])
+      if (awaited.isErr()) {
+        expect(awaited.name).toBe('?test')
+        expect(awaited.causes).toEqual(['?test-cause'])
       }
     })
 
@@ -167,15 +167,15 @@ describe('std/results/fn', () => {
         return okAsync(errAsync('?test', 'test message'))
       }, '?test-cause')()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Err)
-      expect(called.unwrap).toThrow()
+      expect(awaited).toBeInstanceOf(Err)
+      expect(() => awaited.unwrap()).toThrow(Err)
 
-      if (called.isErr()) {
-        expect(called.name).toBe('?test')
-        expect(called.causes).toEqual(['?test-cause'])
+      if (awaited.isErr()) {
+        expect(awaited.name).toBe('?test')
+        expect(awaited.causes).toEqual(['?test-cause'])
       }
     })
 
@@ -186,15 +186,15 @@ describe('std/results/fn', () => {
         return okAsync(okAsync(errAsync('?test', 'test message')))
       }, '?test-cause')()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Err)
-      expect(called.unwrap).toThrow()
+      expect(awaited).toBeInstanceOf(Err)
+      expect(() => awaited.unwrap()).toThrow(Err)
 
-      if (called.isErr()) {
-        expect(called.name).toBe('?test')
-        expect(called.causes).toEqual(['?test-cause'])
+      if (awaited.isErr()) {
+        expect(awaited.name).toBe('?test')
+        expect(awaited.causes).toEqual(['?test-cause'])
       }
     })
   })
@@ -207,11 +207,11 @@ describe('std/results/fn', () => {
         return ok('ok')
       })()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Ok)
-      expect(called.unwrap()).toBe('ok')
+      expect(awaited).toBeInstanceOf(Ok)
+      expect(awaited.unwrap()).toBe('ok')
     })
 
     test('ok - nested 1', async () => {
@@ -221,11 +221,11 @@ describe('std/results/fn', () => {
         return ok('ok')
       })()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Ok)
-      expect(called.unwrap()).toBe('ok')
+      expect(awaited).toBeInstanceOf(Ok)
+      expect(awaited.unwrap()).toBe('ok')
     })
 
     test('ok - nested 2', async () => {
@@ -235,11 +235,11 @@ describe('std/results/fn', () => {
         return ok(ok('ok'))
       })()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Ok)
-      expect(called.unwrap()).toBe('ok')
+      expect(awaited).toBeInstanceOf(Ok)
+      expect(awaited.unwrap()).toBe('ok')
     })
 
     test('ok - nested 3', async () => {
@@ -249,11 +249,11 @@ describe('std/results/fn', () => {
         return ok(ok(ok('ok')))
       })()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Ok)
-      expect(called.unwrap()).toBe('ok')
+      expect(awaited).toBeInstanceOf(Ok)
+      expect(awaited.unwrap()).toBe('ok')
     })
 
     test('err - not nested', async () => {
@@ -263,15 +263,15 @@ describe('std/results/fn', () => {
         return err('?test', 'test message')
       }, '?test-cause')()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Err)
-      expect(called.unwrap).toThrow()
+      expect(awaited).toBeInstanceOf(Err)
+      expect(() => awaited.unwrap()).toThrow(Err)
 
-      if (called.isErr()) {
-        expect(called.name).toBe('?test')
-        expect(called.causes).toEqual(['?test-cause'])
+      if (awaited.isErr()) {
+        expect(awaited.name).toBe('?test')
+        expect(awaited.causes).toEqual(['?test-cause'])
       }
     })
 
@@ -282,15 +282,15 @@ describe('std/results/fn', () => {
         return ok(err('?test', 'test message'))
       }, '?test-cause')()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Err)
-      expect(called.unwrap).toThrow()
+      expect(awaited).toBeInstanceOf(Err)
+      expect(() => awaited.unwrap()).toThrow(Err)
 
-      if (called.isErr()) {
-        expect(called.name).toBe('?test')
-        expect(called.causes).toEqual(['?test-cause'])
+      if (awaited.isErr()) {
+        expect(awaited.name).toBe('?test')
+        expect(awaited.causes).toEqual(['?test-cause'])
       }
     })
 
@@ -301,15 +301,15 @@ describe('std/results/fn', () => {
         return ok(ok(err('?test', 'test message')))
       }, '?test-cause')()
 
-      const called = await result
+      const awaited = await result
 
       expect(result).toBeInstanceOf(ResultAsync)
-      expect(called).toBeInstanceOf(Err)
-      expect(called.unwrap).toThrow()
+      expect(awaited).toBeInstanceOf(Err)
+      expect(() => awaited.unwrap()).toThrow(Err)
 
-      if (called.isErr()) {
-        expect(called.name).toBe('?test')
-        expect(called.causes).toEqual(['?test-cause'])
+      if (awaited.isErr()) {
+        expect(awaited.name).toBe('?test')
+        expect(awaited.causes).toEqual(['?test-cause'])
       }
     })
   })

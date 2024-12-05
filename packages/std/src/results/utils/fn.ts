@@ -13,10 +13,11 @@ const cause = resultTags.get('fn')
 export const $fn = <A extends BlobType[], R, C extends Std.ErrorValues[] = []>(
   fn: (...args: A) => R,
   ...additionalCauses: C
-): ((
-  ...args: A
-) => Std.InjectError<Std.UnionsToResult<R>, typeof invalidUsage, C | (typeof cause)[]>) => {
-  return ((...args: A) => {
+): Std.Middleware<
+  A,
+  Std.InjectError<Std.UnionsToResult<R>, typeof invalidUsage, C | (typeof cause)[]>
+> => {
+  const result = ((...args: A) => {
     try {
       const result = fn(...args)
 
@@ -24,5 +25,14 @@ export const $fn = <A extends BlobType[], R, C extends Std.ErrorValues[] = []>(
     } catch (rawError) {
       return handleCatch(rawError, ...additionalCauses)
     }
-  }) as BlobType
+  }) as Std.Middleware<
+    A,
+    Std.InjectError<Std.UnionsToResult<R>, typeof invalidUsage, C | (typeof cause)[]>
+  >
+
+  result.addCauses = (...newAdditionalCauses) => {
+    return $fn(fn, ...additionalCauses, ...newAdditionalCauses) as BlobType
+  }
+
+  return result
 }

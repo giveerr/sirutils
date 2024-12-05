@@ -1,8 +1,6 @@
 import type { BlobType } from '../../shared'
 
-import { ResultAsync } from './async'
-
-import { handleCatch, handleThen } from './internal/handlers'
+import { forward } from './forward'
 
 /**
  * The capsule function is used to wrap a function for unknown errors
@@ -11,18 +9,13 @@ import { handleCatch, handleThen } from './internal/handlers'
 export const capsule = <A extends BlobType[], R>(
   fn: (...args: A) => R,
   ...additionalCauses: Std.ErrorValues[]
-): ((...args: A) => R) => {
-  return ((...args: A) => {
-    try {
-      const result = handleThen(fn(...args), ...additionalCauses)
+): Std.Middleware<A, R> => {
+  const result = ((...args: A) =>
+    forward(() => fn(...args), ...additionalCauses)) as Std.Middleware<A, R>
 
-      if (result instanceof ResultAsync) {
-        return result.then(data => data.unwrap())
-      }
+  result.addCauses = (...newAdditionalCauses) => {
+    return capsule(fn, ...additionalCauses, ...newAdditionalCauses) as BlobType
+  }
 
-      return result.unwrap()
-    } catch (rawError) {
-      handleCatch(rawError, ...additionalCauses).throw()
-    }
-  }) as BlobType
+  return result
 }
