@@ -43,6 +43,7 @@
     "@sirutils/sircli": "workspace:*"
   },
   "dependencies": {
-    "type-fest": "^4.26.1"
+    "type-fest": "^4.30.0",
+    "picocolors": "^1.1.1"
   }
 }
