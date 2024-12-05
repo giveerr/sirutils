@@ -1,3 +1,4 @@
+/// <reference types="@sirutils/std/shared" />
 /// <reference types="@sirutils/std/results" />
 
 import type { exampleTags } from './tag'
