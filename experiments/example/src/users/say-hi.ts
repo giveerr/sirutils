@@ -1,5 +1,6 @@
-import { $try, Err, err, fromAsyncThrowable, ok } from '@sirutils/std/results'
+import { $try, Err, err, fromAsyncThrowable } from '@sirutils/std/results'
 
+import { logger } from '../consts'
 import { exampleTags } from '../tag'
 import { $getUser } from './get-user'
 
@@ -15,7 +16,7 @@ export const $sayHi = (name?: string) =>
       yield* err('?underage', 'under age')
     }
 
-    return ok(`Hi ${found.name}-${found.age}`)
+    logger.err(`Hi ${found.name}-${found.age}`)
   }, exampleTags.get('say-hi'))
 
 export const a = fromAsyncThrowable(
